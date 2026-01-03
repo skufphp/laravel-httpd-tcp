@@ -1,0 +1,7 @@
+services:
+  # Настройки Xdebug для PHP-FPM
+  laravel-php-httpd-tcp:
+    environment:
+      XDEBUG_MODE: "debug"
+      XDEBUG_START: "yes"
+      XDEBUG_CLIENT_HOST: "${XDEBUG_CLIENT_HOST:-host.docker.internal}"

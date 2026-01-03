@@ -1,0 +1,92 @@
+services:
+  # Laravel PHP-FPM
+  laravel-php-httpd-tcp:
+    build:
+      context: .
+      dockerfile: docker/php.Dockerfile
+    container_name: laravel-php-httpd-tcp
+    restart: unless-stopped
+    working_dir: /var/www/laravel
+    env_file:
+      - .env.docker
+    volumes:
+      - ./src:/var/www/laravel
+      - ./config/php/php.ini:/usr/local/etc/php/conf.d/local.ini:ro
+    networks:
+      - laravel-php-httpd-tcp-network
+    healthcheck:
+      test: [ "CMD-SHELL", "cgi-fcgi -bind -connect 127.0.0.1:9000" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Веб-сервер Apache(httpd)
+  laravel-httpd-tcp:
+    image: httpd:latest
+    container_name: laravel-httpd-tcp
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www/laravel
+      - ./config/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
+    networks:
+      - laravel-php-httpd-tcp-network
+    healthcheck:
+      test: [ "CMD", "httpd", "-t" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    depends_on:
+      laravel-php-httpd-tcp:
+        condition: service_healthy
+
+  # База данных PostgreSQL 17
+  laravel-postgres-httpd-tcp:
+    image: postgres:17-alpine
+    container_name: laravel-postgres-httpd-tcp
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - laravel-php-httpd-tcp-network
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # Веб-интерфейс pgAdmin
+  laravel-pgadmin-httpd-tcp:
+    image: dpage/pgadmin4:latest
+    container_name: laravel-pgadmin-httpd-tcp
+    restart: unless-stopped
+    env_file:
+      - .env.docker
+    ports:
+      - "8080:80"
+    networks:
+      - laravel-php-httpd-tcp-network
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-O", "-", "http://localhost/" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    depends_on:
+      laravel-postgres-httpd-tcp:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+
+networks:
+  laravel-php-httpd-tcp-network:
+    driver: bridge
