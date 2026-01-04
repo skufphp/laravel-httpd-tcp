@@ -1,6 +1,6 @@
-# ===============================================
+# =======================================================
 # Laravel PHP-FPM Apache(httpd) TCP (Boilerplate)
-# ===============================================
+# =======================================================
 
 .PHONY: help up down restart build rebuild logs status shell-php shell-httpd shell-postgres clean setup artisan migrate laravel-install
 
@@ -99,7 +99,7 @@ shell-postgres: ## Подключиться к PostgreSQL CLI
 
 # --- Команды Laravel ---
 
-laravel-install: up ## Создать новый проект Laravel в ./src
+laravel-install: up ## Создать новый проект Laravel в ./src (full cycle)
 	@if [ -d src ] && [ "$$(ls -A src)" ]; then \
 		echo "$(RED)Ошибка: Директория ./src не пуста.$(NC)"; \
 		exit 1; \
@@ -164,7 +164,9 @@ info: ## Показать информацию о проекте
 	@echo "  • 80   - Apache (Web Server)"
 	@echo "  • 5432 - PostgreSQL (Database)"
 	@echo "  • 8080 - pgAdmin (DB Admin Interface)"
-	@echo "  • 9000 - PHP-FPM (TCP)"
+	@echo ""
+	@echo "$(GREEN)Связь:$(NC)"
+	@echo "  • TCP Port: 9000"
 
 validate: ## Проверить доступность сервисов по HTTP
 	@echo "$(YELLOW)Проверка работы сервисов...$(NC)"

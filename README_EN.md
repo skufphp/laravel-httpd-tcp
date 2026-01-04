@@ -1,6 +1,6 @@
 # Laravel Docker Boilerplate (TCP)
 
-A minimalist base project for Laravel using the PHP-FPM + Apache(httpd) stack (via TCP port 9000) + PostgreSQL + pgAdmin.
+A minimalist base project for Laravel using the PHP-FPM + Apache(httpd) stack (TCP) + PostgreSQL + pgAdmin.
 
 ## Project Structure
 - `src/` — Laravel source code (mounted to `/var/www/laravel`)

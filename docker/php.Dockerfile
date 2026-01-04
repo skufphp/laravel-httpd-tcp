@@ -42,7 +42,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Устанавливаем рабочую директорию
 WORKDIR /var/www/laravel
 
-# Открываем порт PHP-FPM
+# Порт 9000 для связи через TCP
 EXPOSE 9000
 
 CMD ["php-fpm", "-F"]

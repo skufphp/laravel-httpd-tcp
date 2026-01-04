@@ -50,7 +50,7 @@
 - `make validate` — проверка доступности сервисов по HTTP
 
 ### Laravel и Composer
-- `make laravel-install` — установка чистого Laravel в `src/` (полный цикл)
+- `make laravel-install` — установка чистого Laravel в `src/` (full cycle)
 - `make artisan CMD="migrate"` — выполнение команд artisan
 - `make composer CMD="install"` — выполнение команд composer
 - `make migrate` — выполнение миграций

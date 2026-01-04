@@ -57,7 +57,7 @@ services:
     networks:
       - laravel-php-httpd-tcp-network
     healthcheck:
-      test: [ "CMD", "pg_isready" ]
+      test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER:-laravel}", "-d", "${POSTGRES_DB:-laravel}" ]
       interval: 10s
       timeout: 5s
       retries: 5
